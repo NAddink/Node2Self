@@ -32,4 +32,32 @@ async function nodeExists (name : string) {
 
 }
 
+export async function linkNames(source : string, target: string, addedBy: string){
+
+    const sourceRes = await axios.get(`../api/nodes/${source}`);
+    const targetRes = await axios.get(`../api/nodes/${target}`);
+
+    // Get ids of source and target nodes
+    const sourceId = sourceRes.data[0]?.id;
+    const targetId = targetRes.data[0]?.id;
+
+    console.log(`Adding links between nodes ${source} (${sourceId}) and ${target} (${targetId})`);
+
+    try{
+
+        const response = await axios.post('../api/links', {
+            source: sourceId,
+            target: targetId,
+            added_by: addedBy
+        });
+
+        console.log(response);
+        console.log("Added link between nodes successfully!");
+
+    } catch(error) {
+        console.log("Error creating link between 2 nodes")
+    }
+
+}
+
 export default nodeExists;

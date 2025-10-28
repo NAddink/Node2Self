@@ -1,6 +1,6 @@
 "use client";
 import { useState, ChangeEvent } from "react";
-import nodeExists from "../components/db";
+import nodeExists, { linkNames } from "../components/db";
 import Navbar from "../components/Navbar";
 
 export default function Add() {
@@ -35,7 +35,6 @@ export default function Add() {
             }
             
         })
-        .catch
     }
     
 
