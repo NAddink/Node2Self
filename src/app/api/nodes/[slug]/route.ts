@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
     request: NextRequest,
-    context: { params: { slug: string } }
+    context: { params: Promise<{ slug: string }> }
+
 ) {
     const { slug: nodeName } = await context.params;
     try {
@@ -27,7 +28,7 @@ export async function GET(
 
 export async function DELETE(
     request: NextRequest,
-    context: { params: { slug: string } }
+    context: { params: Promise<{ slug: string }> } 
 ) {
     const { slug: nodeName } = await context.params;
     const pool = getPool();
