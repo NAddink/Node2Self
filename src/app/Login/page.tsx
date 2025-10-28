@@ -33,9 +33,12 @@ export default function Login() {
     }, []);
     
     const loginHandler = () => {
-        console.log("login")
-        setLoggedIn(true);
-        localStorage.setItem('fullname', inputValue);
+        if(inputValue !== '')
+        {
+            console.log("login")
+            setLoggedIn(true);
+            localStorage.setItem('fullname', inputValue);
+        }
     }
 
 

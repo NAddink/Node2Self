@@ -32,7 +32,7 @@ async function nodeExists (name : string) {
 
 }
 
-export async function linkNames(source : string, target: string, addedBy: string){
+export async function createLink(source : string, target: string, addedBy: string){
 
     const sourceRes = await axios.get(`../api/nodes/${source}`);
     const targetRes = await axios.get(`../api/nodes/${target}`);
