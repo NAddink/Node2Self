@@ -3,7 +3,7 @@ import axios from 'axios';
 
 async function nodeExists (name : string) {
     
-    if(name === "")
+    if(name.trim() === "")
     {
         console.log("No node given as arg");
         return false;
@@ -14,6 +14,7 @@ async function nodeExists (name : string) {
 
     const length = response.data.length;
     console.log(length);
+
 
     if(response.data.length === 0)
     {
