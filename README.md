@@ -20,3 +20,12 @@ Functions of the project working:
 - ⏳ Secondary identification form for names to prevent edge case where 2 people with the same name exist
 
 
+
+
+
+### Api endpoints:
+`/api/nodes`  [GET/POST/DEL]
+
+`/api/nodes/John Smith` [GET] (Slug)
+
+`/api/links`  [GET/POST/DEL]
