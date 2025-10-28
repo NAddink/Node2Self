@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
             
 
             const existingRes = await client.query(
-                `SELECT id FROM links WHERE source = $1 AND target = $2`,
+                `SELECT id FROM links WHERE (source = $1 AND target = $2) OR (source = $2 AND target = $1)`,
                 [source, target]
             );
 
