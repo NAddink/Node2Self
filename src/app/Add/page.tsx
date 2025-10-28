@@ -11,6 +11,8 @@ export default function Add() {
     const [userName, setUserName] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
 
+    const [errorMsg, setErrorMsg] = useState("");
+
 
     useEffect(() => {
             let fullNameStorage : string | null = localStorage.getItem('fullname');
@@ -38,29 +40,36 @@ export default function Add() {
     };
     
 
-    const addHandler = () => {
+    const addHandler = async () => {
 
         const fullname = firstName.trim() + " " + lastName.trim();
         console.log(`DEBUG: Entered name is \'${fullname}\'`)
 
         // get storage variable and verify that it's a string
         
+        const exists = await nodeExists(fullname);
+        console.log(exists);
+        if (exists){
+            const result = await createLink(userName, fullname, userName)
+            if(result === 409){
+                console.log("Link already exists!")
+                setErrorMsg("Link already exists!")
+            }
+            else if(result === 201){
+                console.log("Link created successfully!")
+                setErrorMsg("Link created successfully!")
+            }
+            else{
+                console.log("Some error occured: ", result);
+                setErrorMsg("ERROR: " + result);
 
-        nodeExists(firstName.trim() + " " + lastName.trim())
-        .then(result => {
-            console.log(result);
-            if(result) { // entered node already exists
-                // only create connection to node
-                createLink(userName, fullname, userName)
             }
-            if(!result){ // entered node does not exist
-                // create node and create connection from current
-                
-                createLink(userName, fullname, userName)
-            }
-            
-        })
+        }
+        else{
+            // node does not exist, create it
+        }
     }
+
     
     if (loading) {
         return (
@@ -103,10 +112,12 @@ export default function Add() {
                         />
                         <br /> <br />
                         
-
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="button" onClick={addHandler}>
-                            Add Connection
-                        </button>
+                        <div className="flex justify-center">
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="button" onClick={addHandler}>
+                                Add Connection
+                            </button>
+                        </div>
+                        <p className="text-center text-red-800">{errorMsg}</p>
                     </div>
                 )}
 

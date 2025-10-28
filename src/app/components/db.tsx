@@ -12,10 +12,6 @@ async function nodeExists (name : string) {
     const response = await axios.get(`../api/nodes/${name}`);
     console.log(response.data);
 
-    const length = response.data.length;
-    console.log(length);
-
-
     if(response.data.length === 0)
     {
         console.log("Node does not exist")
@@ -43,6 +39,12 @@ export async function createLink(source : string, target: string, addedBy: strin
 
     console.log(`Adding links between nodes ${source} (${sourceId}) and ${target} (${targetId})`);
 
+    if(targetId === sourceId)
+    {
+        console.log("Can't link to self!");
+        return 409;
+    }
+
     try{
 
         const response = await axios.post('../api/links', {
@@ -53,8 +55,15 @@ export async function createLink(source : string, target: string, addedBy: strin
 
         console.log(response);
         console.log("Added link between nodes successfully!");
+        return 201;
 
-    } catch(error) {
+    } catch(error: any) {
+        if (axios.isAxiosError(error)){
+            if(error.response?.status === 409){
+                console.log("Link already exists! (409 Conflict)");
+                return 409;
+            }
+        }
         console.log("Error creating link between 2 nodes")
     }
 
