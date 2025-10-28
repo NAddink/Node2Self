@@ -37,7 +37,7 @@
     "**/*.mts",
     ".next\\dev/types/**/*.ts",
     ".next\\dev/types/**/*.ts"
-, "src/app/pages/example/first.js"  ],
+, "src/app/pages/example/first.js", "src/app/components/Graph.tsx"  ],
   "exclude": [
     "node_modules"
   ]

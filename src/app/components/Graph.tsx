@@ -17,11 +17,11 @@ function Graph() {
     async function fetchData() {
         try {
             // Fetch nodes first
-            const nodesRes = await axios.get('http://localhost:3000/api/nodes');
+            const nodesRes = await axios.get('../api/nodes');
             setNodes(nodesRes.data);
 
             // Then fetch links
-            const linksRes = await axios.get('http://localhost:3000/api/links');
+            const linksRes = await axios.get('../api/links');
             setLinks(linksRes.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -57,7 +57,7 @@ function Graph() {
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = (node as any).color;
-                ctx.fillText(label, node.x, node.y);
+                ctx.fillText(label, node.x ?? 0, node.y ?? 0);
 
                 (node as any).__bckgDimensions = bckgDimensions; // store for pointer area
                 }}
@@ -65,7 +65,8 @@ function Graph() {
                 const bckgDimensions = (node as any).__bckgDimensions;
                 if (bckgDimensions) {
                     ctx.fillStyle = color;
-                    ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+                    const [width, height] = bckgDimensions;
+                    ctx.fillRect((node.x ?? 0) - width / 2, (node.y ?? 0) - height / 2, width, height);
                 }
                 }}
             />
