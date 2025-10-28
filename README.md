@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Degrees of Separation
 
-## Getting Started
+This project is a passion project founded in my interest in the Stanley Milgram's [Small World Experiments](https://en.wikipedia.org/wiki/Six_degrees_of_separation) and research suggesting that human society is a small-world network.
 
-First, run the development server:
+While I am not a sociologist or involved in those fields, I thought this was very interesting and wanted to see if I could create my own (very non-scientific) representation of this.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The vision was a webapp where users could self-identify themselves by inputting a name and adding connections to their own "node"
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+As (I nagged and convinced) more people to visit the page and add names, the data would eventually form a network of interconnected names. While this would most likely not reveal any interesting patterns, it was a fun and interesting way to visualize social connections. I predict that the graph the connections will eventually make will be pretty non-cyclical.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Since the webapp would (by nature of me making it) only really be available to my own social connections, my name will most likely become a pretty major hub since the first "batch" of users would be connected to me directly, and the graphs would only extend more than 1 degree from my own name if the people I give the information on the website to also give it to other people (which would be ideal in the long run)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+Functions of the project working:
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- ✅ API endpoints for adding and deleting nodes and links
+- ⏳ User 'login' for self identifying before adding connections
+- ⏳ User input form for adding new connections
+- ⏳ Secondary identification form for names to prevent edge case where 2 people with the same name exist
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
