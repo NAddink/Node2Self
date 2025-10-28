@@ -7,16 +7,12 @@ import Navbar from "../components/Navbar";
 export default function Login() {
 
     const [loggedIn, setLoggedIn] = useState(false);
-    const [fullname, setFullName] = useState("");
-    const [inputValue, setInputValue] = useState(''); // Initialize state for input value
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [fullName, setFullName] = useState(''); // Initialize state for input value
     const [loading, setLoading] = useState(true);
 
-
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value); // Update state on every input change
-        console.log("current input " + inputValue)
-    };
-
+    
     useEffect(() => {
         let fullNameStorage : string | null = localStorage.getItem('fullname');
         if(fullNameStorage !== '' && fullNameStorage != null){
@@ -32,14 +28,22 @@ export default function Login() {
         
     }, []);
     
+    const firstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setFirstName(event.target.value); // Update state on every input change
+        console.log("DEBUG: Current first name " + firstName)
+    };
+
+    const lastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setLastName(event.target.value); // Update state on every input change
+        console.log("DEBUG: Current last name " + lastName)
+    };
+
     const loginHandler = () => {
-        if(inputValue !== '')
-        {
-            console.log("login")
-            setLoggedIn(true);
-            localStorage.setItem('fullname', inputValue);
-        }
+        console.log("Setting full name to " + firstName.trim() + " " + lastName.trim());
+        localStorage.setItem('fullname', firstName.trim() + " " + lastName.trim());
     }
+    
+    
 
 
     const logoutHandler = () => {
@@ -68,26 +72,35 @@ export default function Login() {
                 {!loggedIn && (
                             
                     <div className="grid w-full">
-                        <form className="rounded pt-6 mb-8" onSubmit={loginHandler}>
+                        <form className="rounded pt-6 mb-8">
                             <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2 text-center" htmlFor="username">
                                 Full Name
                             </label>
                             
+                            <label className="text-black">First Name</label>
                             <input 
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
-                            id="username" 
                             type="text" 
-                            placeholder="John Smith" 
-                            value={inputValue} // Bind input value to state
-                            onChange={handleChange} // Update state on change
+                            placeholder="John" 
+                            value={firstName} // Bind input value to state
+                            onChange={firstNameChange} // Update state on change
+                            />
+
+                            <label className="text-black">Last Name</label>
+                            <input 
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
+                            type="text" 
+                            placeholder="Deer" 
+                            value={lastName} // Bind input value to state
+                            onChange={lastNameChange} // Update state on change
                             />
                             </div>
                             
                             <div className="mb-6">
                             </div>
                             <div className="flex justify-center">
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="submit">
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" onClick={loginHandler}>
                                     Sign In
                                 </button>
                             </div>
@@ -104,7 +117,7 @@ export default function Login() {
                         <form className="rounded pt-6 mb-8">
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2 text-center" htmlFor="username">
-                                    You are logged in! {fullname} 
+                                    You are logged in! {firstName} {lastName} 
                                 </label>
                             </div>
                             
