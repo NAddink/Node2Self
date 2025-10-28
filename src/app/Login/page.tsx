@@ -1,14 +1,4 @@
-'use client';
-
-import dynamic from 'next/dynamic';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import ForceGraph from './components/Graph';
-
-// Dynamically import ForceGraph2D only on the client
-const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
-
-export default function Home() {
+export default function Login() {
     
 
 
@@ -22,7 +12,7 @@ export default function Home() {
                     <a href="Login"><p className="font-martian text-xl">LOGIN</p></a>
                 </div>
                 
-                <ForceGraph />
+                <h1>LOGIN</h1>
 
             </div>
         </div>
