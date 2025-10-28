@@ -9,22 +9,33 @@ async function nodeExists (name : string) {
         return false;
     }
 
-    const response = await axios.get(`../api/nodes/${name}`);
-    console.log(response.data);
+    console.log(`Checking if ${name.trim()} exists...`)
 
-    if(response.data.length === 0)
-    {
-        console.log("Node does not exist")
+    try{
+        const response = await axios.get(`../api/nodes/${name}`);
+        console.log(response.data);
+    
+        if(response.data.length === 0)
+        {
+            console.log("Node does not exist")
+            return false;
+        }
+    
+        if(response.data.length === 1)
+        {
+            console.log("Node exists")
+            return true;
+        }
+
         return false;
+        
+    } catch (error: any){
+        if (axios.isAxiosError(error)){
+            console.log("Axios error: ", error.response?.status, error.response?.data)
+        } else{
+            console.log("Unexpected error: ", error);
+        }
     }
-
-    if(response.data.length === 1)
-    {
-        console.log("Node exists")
-        return true;
-    }
-
-    return false;
 
 }
 

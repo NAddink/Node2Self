@@ -67,6 +67,7 @@ export default function Add() {
         }
         else{
             // node does not exist, create it
+            setErrorMsg("Node does not exist, cannot add connection.")
         }
     }
 

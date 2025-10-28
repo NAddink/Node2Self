@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import React, { ChangeEvent, MouseEvent } from 'react';
 import Navbar from "../components/Navbar";
+import nodeExists from "../components/db";
  
 
 export default function Login() {
@@ -11,6 +12,9 @@ export default function Login() {
     const [lastName, setLastName] = useState("");
     const [fullName, setFullName] = useState(''); // Initialize state for input value
     const [loading, setLoading] = useState(true);
+
+    const [errorMsg, setErrorMsg] = useState("");
+
 
     
     useEffect(() => {
@@ -38,9 +42,24 @@ export default function Login() {
         console.log("DEBUG: Current last name " + lastName)
     };
 
-    const loginHandler = () => {
-        console.log("Setting full name to " + firstName.trim() + " " + lastName.trim());
-        localStorage.setItem('fullname', firstName.trim() + " " + lastName.trim());
+    const loginHandler = async () => {
+
+        const exists = await nodeExists(firstName.trim() + " " + lastName.trim());
+        if(!exists)
+        {
+            // if node does not already exist for user loggin in, create one.
+            console.log("This name does not already have a node. Create one.")
+            setErrorMsg("This name does not already have a node. Create one.")
+        }
+        if(exists){
+            // name logging in already has a node
+            console.log("Setting full name to " + firstName.trim() + " " + lastName.trim());
+            localStorage.setItem('fullname', firstName.trim() + " " + lastName.trim());
+            setLoggedIn(true);
+
+        }
+        
+
     }
     
     
@@ -50,6 +69,7 @@ export default function Login() {
         console.log("logout")
         setLoggedIn(false);
         localStorage.setItem('fullname', '');
+        setErrorMsg(""); // remove any existing error message
     }
 
     if (loading) {
@@ -100,11 +120,13 @@ export default function Login() {
                             <div className="mb-6">
                             </div>
                             <div className="flex justify-center">
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" onClick={loginHandler}>
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="button" onClick={loginHandler}>
                                     Sign In
                                 </button>
                             </div>
                         </form>
+                        <p className="text-center text-red-800">{errorMsg}</p>
+
                         <p className="text-center text-gray-700"><i>To properly add connections, please put your proper first and last name, not a nickname or username.</i></p>
                         <p className="text-center text-gray-700"><i>Your full name will be used to add connections to your node on the graph.</i></p>
                         
