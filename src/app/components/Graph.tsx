@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 // Dynamically import ForceGraph2D only on the client
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
 
-function Graph() {
+function ForceGraph(props?: any) {
     
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
@@ -18,17 +18,27 @@ function Graph() {
         try {
             // Fetch nodes first
             const nodesRes = await axios.get('../api/nodes');
-            setNodes(nodesRes.data);
-
+            
             // Then fetch links
             const linksRes = await axios.get('../api/links');
+                        
+            // set current user node to red (given as props.userName)
+            const updatedNodes = nodesRes.data.map((node?: any) => {
+                const color = node.name === props.userName ? 'red' : 'white'
+                return { ...node, color };
+            });
+
+            setNodes(updatedNodes);
             setLinks(linksRes.data);
+
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
         }
         }
+
+        
 
         fetchData();
     }, []);
@@ -74,4 +84,4 @@ function Graph() {
     );
 }
 
-export default Graph;
+export default ForceGraph;

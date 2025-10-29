@@ -19,7 +19,7 @@ export default function Home() {
                 {/* Navbar */}
                 <Navbar />
                 
-                <ForceGraph />
+                <ForceGraph userName="Noah Addink"/>
 
             </div>
         </div>
