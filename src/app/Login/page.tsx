@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import React, { ChangeEvent, MouseEvent } from 'react';
 import Navbar from "../components/Navbar";
-import nodeExists from "../components/db";
+import {nodeExists}from "../components/db";
  
 
 export default function Login() {
@@ -30,7 +30,7 @@ export default function Login() {
         }
         setLoading(false);
         
-    }, []);
+    }, [loggedIn]);
     
     const firstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setFirstName(event.target.value); // Update state on every input change
@@ -140,7 +140,7 @@ export default function Login() {
                         <form className="rounded pt-6 mb-8">
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2 text-center" htmlFor="username">
-                                    You are logged in! {firstName} {lastName} 
+                                    You are logged in as {fullName}! 
                                 </label>
                             </div>
                             

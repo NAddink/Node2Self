@@ -1,6 +1,6 @@
 "use client";
 import { useState, ChangeEvent, useEffect } from "react";
-import {nodeExists, createLink } from "../components/db";
+import {nodeExists, createLink, addNode } from "../components/db";
 import Navbar from "../components/Navbar";
 
 export default function Add() {
@@ -58,7 +58,7 @@ export default function Add() {
             }
             else if(result === 201){
                 console.log("Link created successfully!")
-                setErrorMsg("Link created successfully!")
+                setErrorMsg(`Successfully linked ${fullname} to you`)
             }
             else{
                 console.log("Some error occured: ", result);
@@ -68,7 +68,35 @@ export default function Add() {
         }
         else{
             // node does not exist, create it
-            setErrorMsg("Node does not exist, cannot add connection.")
+            setErrorMsg("Node does not exist, adding...")
+            const result = await addNode(fullname, userName);
+            if(result === 409){
+                console.log("Tried to add node but it already exists!")
+                setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
+            }
+            else if(result === 201){
+                console.log("Node created successfully!")
+
+                const result = await createLink(userName, fullname, userName)
+                if(result === 409){
+                    console.log("Created node but link already exists! (Should not happen)")
+                    setErrorMsg("Created node but link already exists! (Should not happen)")
+                }
+                // Successfully added new node and linked it to user
+                else if(result === 201){
+                    console.log("Link created successfully!")
+                    setErrorMsg(`Successfully added ${fullname} and linked to you!`)
+                }
+                else{
+                    console.log("Some error occured: ", result);
+                    setErrorMsg("ERROR: " + result);
+
+                }
+            }
+            else{
+                console.log("Some error occured: ", result);
+                setErrorMsg("ERROR: " + result);
+            }
         }
     }
 
