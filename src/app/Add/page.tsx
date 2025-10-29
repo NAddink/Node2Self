@@ -40,7 +40,8 @@ export default function Add() {
     };
     
 
-    const addHandler = async () => {
+    const addHandler = async (event: any) => {
+        event.preventDefault(); 
         setErrorMsg("Loading...");
 
         const fullname = firstName.trim() + " " + lastName.trim();
@@ -129,31 +130,33 @@ export default function Add() {
                 )}
                 {loggedIn && (
                     <div className="pt-5">
-                        <p className="text-center text-black">Currently logged in as {userName}!</p>
-                        <label className="text-black">First Name</label>
-                        <input 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
-                        type="text" 
-                        placeholder="John" 
-                        value={firstName} // Bind input value to state
-                        onChange={firstNameChange} // Update state on change
-                        />
+                        <form onSubmit={addHandler}>
+                            <p className="text-center text-black">Currently logged in as {userName}!</p>
+                            <label className="text-black">First Name</label>
+                            <input 
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
+                            type="text" 
+                            placeholder="John" 
+                            value={firstName} // Bind input value to state
+                            onChange={firstNameChange} // Update state on change
+                            />
 
-                        <label className="text-black">Last Name</label>
-                        <input 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
-                        type="text" 
-                        placeholder="Deer" 
-                        value={lastName} // Bind input value to state
-                        onChange={lastNameChange} // Update state on change
-                        />
-                        <br /> <br />
-                        
-                        <div className="flex justify-center">
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="button" onClick={addHandler}>
-                                Add Connection
-                            </button>
-                        </div>
+                            <label className="text-black">Last Name</label>
+                            <input 
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
+                            type="text" 
+                            placeholder="Deer" 
+                            value={lastName} // Bind input value to state
+                            onChange={lastNameChange} // Update state on change
+                            />
+                            <br /> <br />
+                            
+                            <div className="flex justify-center">
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="submit" onClick={addHandler}>
+                                    Add Connection
+                                </button>
+                            </div>
+                        </form>
                         
                         <p className="text-center pt-8 text-red-800">{errorMsg}</p>
                     </div>

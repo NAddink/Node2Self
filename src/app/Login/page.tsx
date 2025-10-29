@@ -42,8 +42,9 @@ export default function Login() {
         console.log("DEBUG: Current last name " + lastName)
     };
 
-    const loginHandler = async () => {
-
+    const loginHandler = async (event: any) => {
+        event.preventDefault(); 
+        
         setErrorMsg("Loading...");
 
         const exists = await nodeExists(firstName.trim() + " " + lastName.trim());
@@ -94,35 +95,33 @@ export default function Login() {
                 {!loggedIn && (
                             
                     <div className="grid w-full">
-                        <form className="rounded pt-6 mb-8">
+                        <form onSubmit={loginHandler} className="rounded pt-6 mb-8">
                             <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2 text-center" htmlFor="username">
-                                Full Name
-                            </label>
-                            
-                            <label className="text-black">First Name</label>
-                            <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
-                            type="text" 
-                            placeholder="John" 
-                            value={firstName} // Bind input value to state
-                            onChange={firstNameChange} // Update state on change
-                            />
+                                <label className="block text-gray-700 text-sm font-bold mb-2 text-center" htmlFor="username">
+                                    Full Name
+                                </label>
+                                
+                                <label className="text-black">First Name</label>
+                                <input 
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
+                                type="text" 
+                                placeholder="John" 
+                                value={firstName} // Bind input value to state
+                                onChange={firstNameChange} // Update state on change
+                                />
 
-                            <label className="text-black">Last Name</label>
-                            <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
-                            type="text" 
-                            placeholder="Deer" 
-                            value={lastName} // Bind input value to state
-                            onChange={lastNameChange} // Update state on change
-                            />
+                                <label className="text-black">Last Name</label>
+                                <input 
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
+                                type="text" 
+                                placeholder="Deer" 
+                                value={lastName} // Bind input value to state
+                                onChange={lastNameChange} // Update state on change
+                                />
                             </div>
                             
-                            <div className="mb-6">
-                            </div>
                             <div className="flex justify-center">
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="button" onClick={loginHandler}>
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" type="submit" onClick={loginHandler}>
                                     Sign In
                                 </button>
                             </div>
