@@ -48,7 +48,7 @@ function Graph() {
                 nodeCanvasObject={(node, ctx, globalScale) => {
                 const label = node.name;
                 const fontSize = 4;
-                ctx.font = `${fontSize}px Sans-Serif`;
+                ctx.font = `${fontSize}px Pixellari`;
                 const textWidth = ctx.measureText(label).width;
                 const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
 

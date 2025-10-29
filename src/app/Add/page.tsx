@@ -41,6 +41,7 @@ export default function Add() {
     
 
     const addHandler = async () => {
+        setErrorMsg("Loading...");
 
         const fullname = firstName.trim() + " " + lastName.trim();
         console.log(`DEBUG: Entered name is \'${fullname}\'`)
@@ -90,7 +91,13 @@ export default function Add() {
                 <Navbar />
                 
                 {!loggedIn && (
-                    <h1>NOT LOGGED IN</h1>
+
+                    <div className="flex flex-col items-center justify-center w-full h-screen">
+                        <h1 className="text-center mb-4 text-red-800 text-2xl">Not logged in</h1>
+                        <a className=" text-5xl" href="Login"><u>LOGIN</u></a>
+                    </div>
+
+
                 )}
                 {loggedIn && (
                     <div className="pt-5">
@@ -118,7 +125,8 @@ export default function Add() {
                                 Add Connection
                             </button>
                         </div>
-                        <p className="text-center text-red-800">{errorMsg}</p>
+                        
+                        <p className="text-center pt-8 text-red-800">{errorMsg}</p>
                     </div>
                 )}
 

@@ -44,6 +44,8 @@ export default function Login() {
 
     const loginHandler = async () => {
 
+        setErrorMsg("Loading...");
+
         const exists = await nodeExists(firstName.trim() + " " + lastName.trim());
         if(!exists)
         {
@@ -125,8 +127,7 @@ export default function Login() {
                                 </button>
                             </div>
                         </form>
-                        <p className="text-center text-red-800">{errorMsg}</p>
-
+                        <p className="text-center text-red-800 py-8">{errorMsg}</p>
                         <p className="text-center text-gray-700"><i>To properly add connections, please put your proper first and last name, not a nickname or username.</i></p>
                         <p className="text-center text-gray-700"><i>Your full name will be used to add connections to your node on the graph.</i></p>
                         
