@@ -23,6 +23,8 @@ export default function Home() {
             }
             else{
                 console.log("No local variable found")
+                // no logged in user, show graph
+                setLoading(false)
             }
             
             
