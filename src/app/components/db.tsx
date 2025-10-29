@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-async function nodeExists (name : string) {
+export async function nodeExists (name : string) {
     
     if(name.trim() === "")
     {
@@ -80,4 +80,27 @@ export async function createLink(source : string, target: string, addedBy: strin
 
 }
 
-export default nodeExists;
+export async function addNode(name: string, addedBy : string){
+
+    try{
+
+        const response = await axios.post('../api/nodes', {
+            name: name,
+            added_by: addedBy
+        });
+
+        console.log(response);
+        console.log("Added node successfully!");
+        return 201;
+
+    } catch(error: any) {
+        if (axios.isAxiosError(error)){
+            if(error.response?.status === 409){
+                console.log("Node already exists! (409 Conflict)");
+                return 409;
+            }
+        }
+        console.log("Error creating node between 2 nodes")
+    }
+
+}

@@ -1,6 +1,6 @@
 "use client";
 import { useState, ChangeEvent, useEffect } from "react";
-import nodeExists, { createLink } from "../components/db";
+import {nodeExists, createLink } from "../components/db";
 import Navbar from "../components/Navbar";
 
 export default function Add() {

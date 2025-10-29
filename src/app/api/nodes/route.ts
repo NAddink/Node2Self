@@ -34,9 +34,26 @@ export async function POST(request: NextRequest) {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
+            
+            const existingRes = await client.query(
+                `SELECT id FROM nodes WHERE name = $1`,
+                [name]
+            );
+
+            const numrows : number | null = existingRes.rowCount;
+            
+            if (numrows !== null && numrows > 0) {
+                await client.query('ROLLBACK');
+                return NextResponse.json(
+                { error: 'Node already exists', id: existingRes.rows[0].id },
+                { status: 409 } // 409 Conflict
+                );
+            }
+            
+            
             const nodeRes = await client.query(
                 `INSERT INTO nodes (name, added_by)
-         VALUES ($1, $2) RETURNING id`,
+                VALUES ($1, $2) RETURNING id`,
                 [name, added_by]
             );
             const nodeId: number = nodeRes.rows[0].id;
