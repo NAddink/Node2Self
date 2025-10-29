@@ -24,7 +24,7 @@ function ForceGraph(props?: any) {
                         
             // set current user node to red (given as props.userName)
             const updatedNodes = nodesRes.data.map((node?: any) => {
-                const color = node.name === props.userName ? 'red' : 'white'
+                const color = node.name === props.userName ? 'black' : 'white'
                 return { ...node, color };
             });
 
