@@ -129,6 +129,7 @@ export default function Add() {
                 )}
                 {loggedIn && (
                     <div className="pt-5">
+                        <p className="text-center text-black">Currently logged in as {userName}!</p>
                         <label className="text-black">First Name</label>
                         <input 
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
