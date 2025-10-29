@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
             await client.query('BEGIN');
             
             const existingRes = await client.query(
-                `SELECT id FROM nodes WHERE name = $1`,
+                `SELECT id FROM nodes WHERE lower(name) = lower($1)`,
                 [name]
             );
 
