@@ -15,7 +15,7 @@ export default function Add() {
 
 
     useEffect(() => {
-            let fullNameStorage : string | null = localStorage.getItem('fullname');
+            let fullNameStorage : string | null = localStorage.getItem('username');
             if(fullNameStorage !== '' && fullNameStorage != null){
                 console.log("Full name found in storage var, full name is " + fullNameStorage)
                 setUserName(fullNameStorage ?? "");

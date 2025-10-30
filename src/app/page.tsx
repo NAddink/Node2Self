@@ -16,7 +16,7 @@ export default function Home() {
     
     // runs on page load to get name from storage
     useEffect(() => {
-            let fullNameStorage : string | null = localStorage.getItem('fullname');
+            let fullNameStorage : string | null = localStorage.getItem('username');
             if(fullNameStorage !== '' && fullNameStorage != null){
                 console.log(fullNameStorage);
                 setUserName(fullNameStorage ?? null);

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import React, { ChangeEvent, MouseEvent } from 'react';
 import Navbar from "../components/Navbar";
-import {nodeExists}from "../components/db";
+import {addNode, nodeExists}from "../components/db";
  
 
 export default function Login() {
@@ -10,7 +10,7 @@ export default function Login() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [fullName, setFullName] = useState(''); // Initialize state for input value
+    const [username, setUsername] = useState(''); // Initialize state for input value
     const [loading, setLoading] = useState(true);
 
     const [errorMsg, setErrorMsg] = useState("");
@@ -18,10 +18,10 @@ export default function Login() {
 
     
     useEffect(() => {
-        let fullNameStorage : string | null = localStorage.getItem('fullname');
+        let fullNameStorage : string | null = localStorage.getItem('username');
         if(fullNameStorage !== '' && fullNameStorage != null){
             console.log("Full name found in storage var, full name is " + fullNameStorage)
-            setFullName(fullNameStorage ?? "");
+            setUsername(fullNameStorage ?? "");
             console.log("Setting logged in to true");
             setLoggedIn(true);
         }
@@ -46,22 +46,39 @@ export default function Login() {
         event.preventDefault(); 
         
         setErrorMsg("Loading...");
+        let usernameInput = firstName.trim() + " " + lastName.trim();
 
-        const exists = await nodeExists(firstName.trim() + " " + lastName.trim());
+        const exists = await nodeExists(usernameInput);
+        
+        if(exists){
+            // name logging in already has a node
+            console.log("Setting logged in username to " + usernameInput);
+            localStorage.setItem('username', usernameInput);
+            setLoggedIn(true);
+
+        }
+
         if(!exists)
         {
             // if node does not already exist for user loggin in, create one.
             console.log("This name does not already have a node. Create one.")
-            setErrorMsg("This name does not already have a node. Create one.")
+            setErrorMsg("This name does not already exist in the graph. Creating it now...")
+            const result = await addNode(usernameInput, "new user");
+            if(result === 409){
+                console.log("Tried to add node but it already exists!")
+                setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
+            }
+            else if(result === 201){
+                console.log("Node created successfully!")
+                console.log("Setting logged in username to " + firstName.trim() + " " + lastName.trim());
+                localStorage.setItem('username', firstName.trim() + " " + lastName.trim());
+                setLoggedIn(true);
+            }
+            else{
+                console.log("Some error occured: ", result);
+                setErrorMsg("ERROR: " + result);
+            }
         }
-        if(exists){
-            // name logging in already has a node
-            console.log("Setting full name to " + firstName.trim() + " " + lastName.trim());
-            localStorage.setItem('fullname', firstName.trim() + " " + lastName.trim());
-            setLoggedIn(true);
-
-        }
-        
 
     }
     
@@ -71,7 +88,7 @@ export default function Login() {
     const logoutHandler = () => {
         console.log("logout")
         setLoggedIn(false);
-        localStorage.setItem('fullname', '');
+        localStorage.setItem('username', '');
         setErrorMsg(""); // remove any existing error message
     }
 
@@ -139,7 +156,7 @@ export default function Login() {
                         <form className="rounded pt-6 mb-8">
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2 text-center" htmlFor="username">
-                                    You are logged in as {fullName}! 
+                                    You are logged in as {username}! 
                                 </label>
                             </div>
                             
