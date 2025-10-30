@@ -68,36 +68,45 @@ export default function Add() {
             }
         }
         else{
-            // node does not exist, create it
-            setErrorMsg("Node does not exist, adding...")
-            const result = await addNode(fullname, userName);
-            if(result === 409){
-                console.log("Tried to add node but it already exists!")
-                setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
-            }
-            else if(result === 201){
-                console.log("Node created successfully!")
+            // node does not exist, prompt to create
 
-                const result = await createLink(userName, fullname, userName)
+            let isConfirmed = confirm("This name does not already exist, create it?", );
+
+            // if user confirms, create new node and link
+            if(isConfirmed){
+
+                setErrorMsg("Node does not exist, adding...")
+                const result = await addNode(fullname, userName);
                 if(result === 409){
-                    console.log("Created node but link already exists! (Should not happen)")
-                    setErrorMsg("Created node but link already exists! (Should not happen)")
+                    console.log("Tried to add node but it already exists!")
+                    setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
                 }
-                // Successfully added new node and linked it to user
                 else if(result === 201){
-                    console.log("Link created successfully!")
-                    setErrorMsg(`Successfully added ${fullname} and linked to you!`)
+                    console.log("Node created successfully!")
+    
+                    const result = await createLink(userName, fullname, userName)
+                    if(result === 409){
+                        console.log("Created node but link already exists! (Should not happen)")
+                        setErrorMsg("Created node but link already exists! (Should not happen)")
+                    }
+                    // Successfully added new node and linked it to user
+                    else if(result === 201){
+                        console.log("Link created successfully!")
+                        setErrorMsg(`Successfully added ${fullname} and linked to you!`)
+                    }
+                    else{
+                        console.log("Some error occured: ", result);
+                        setErrorMsg("ERROR: " + result);
+    
+                    }
                 }
                 else{
                     console.log("Some error occured: ", result);
                     setErrorMsg("ERROR: " + result);
-
                 }
             }
-            else{
-                console.log("Some error occured: ", result);
-                setErrorMsg("ERROR: " + result);
-            }
+
+            setErrorMsg(""); // create cancelled, clear message
         }
     }
 

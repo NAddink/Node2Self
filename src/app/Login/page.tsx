@@ -63,21 +63,32 @@ export default function Login() {
             // if node does not already exist for user loggin in, create one.
             console.log("This name does not already have a node. Create one.")
             setErrorMsg("This name does not already exist in the graph. Creating it now...")
-            const result = await addNode(usernameInput, "new user");
-            if(result === 409){
-                console.log("Tried to add node but it already exists!")
-                setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
+            
+            // Prompt user to confirm new creation
+            let isConfirmed = confirm("This name does not already exist, create it?", );
+
+            // Create new node after confirming with user
+            if(isConfirmed){
+                const result = await addNode(usernameInput, "new user");
+                if(result === 409){
+                    console.log("Tried to add node but it already exists!")
+                    setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
+                }
+                else if(result === 201){
+                    console.log("Node created successfully!")
+                    console.log("Setting logged in username to " + firstName.trim() + " " + lastName.trim());
+                    localStorage.setItem('username', firstName.trim() + " " + lastName.trim());
+                    setLoggedIn(true);
+                }
+                else{
+                    console.log("Some error occured: ", result);
+                    setErrorMsg("ERROR: " + result);
+                }
+
             }
-            else if(result === 201){
-                console.log("Node created successfully!")
-                console.log("Setting logged in username to " + firstName.trim() + " " + lastName.trim());
-                localStorage.setItem('username', firstName.trim() + " " + lastName.trim());
-                setLoggedIn(true);
-            }
-            else{
-                console.log("Some error occured: ", result);
-                setErrorMsg("ERROR: " + result);
-            }
+
+            setErrorMsg(""); // create cancelled, clear message
+
         }
 
     }
