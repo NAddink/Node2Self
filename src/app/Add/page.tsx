@@ -2,6 +2,7 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import {nodeExists, createLink, addNode } from "../components/db";
 import Navbar from "../components/Navbar";
+import { FailureMsg, SuccessMsg } from "../components/alerts";
 
 export default function Add() {
 
@@ -42,10 +43,18 @@ export default function Add() {
 
     const addHandler = async (event: any) => {
         event.preventDefault(); 
-        setErrorMsg("Loading...");
+        
 
         const fullname = firstName.trim() + " " + lastName.trim();
         console.log(`DEBUG: Entered name is \'${fullname}\'`)
+
+        // ignore if name is empty or whitespace
+        if(fullname.trim() === "")
+        {
+            return;
+        }
+
+        setErrorMsg("Loading...");
 
         // get storage variable and verify that it's a string
         
@@ -55,11 +64,27 @@ export default function Add() {
             const result = await createLink(userName, fullname, userName)
             if(result === 409){
                 console.log("Link already exists!")
-                setErrorMsg("Link already exists!")
+
+                // clear error msg
+                setErrorMsg("")
+
+                // send error msg
+                SuccessMsg.fire({
+                    icon: "error",
+                    title: `Link already exists!`
+                });
             }
             else if(result === 201){
                 console.log("Link created successfully!")
-                setErrorMsg(`Successfully linked ${fullname} to you`)
+
+                // clear error msg
+                setErrorMsg('')
+
+                // send success msg
+                SuccessMsg.fire({
+                    icon: "success",
+                    title: `Successfully linked ${fullname} to you`
+                });
             }
             else{
                 console.log("Some error occured: ", result);
@@ -69,7 +94,6 @@ export default function Add() {
         }
         else{
             // node does not exist, prompt to create
-
             let isConfirmed = confirm("This name does not already exist, create it?", );
 
             // if user confirms, create new node and link
@@ -92,7 +116,15 @@ export default function Add() {
                     // Successfully added new node and linked it to user
                     else if(result === 201){
                         console.log("Link created successfully!")
-                        setErrorMsg(`Successfully added ${fullname} and linked to you!`)
+                        
+                        // clear error msg
+                        setErrorMsg('');
+
+                        // send success msg
+                        SuccessMsg.fire({
+                            icon: "success",
+                            title: `Successfully added ${fullname} and linked to you!`
+                        });
                     }
                     else{
                         console.log("Some error occured: ", result);

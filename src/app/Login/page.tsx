@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import React, { ChangeEvent, MouseEvent } from 'react';
 import Navbar from "../components/Navbar";
 import {addNode, nodeExists}from "../components/db";
+import { SuccessMsg } from "../components/alerts";
  
 
 export default function Login() {
@@ -55,6 +56,10 @@ export default function Login() {
             console.log("Setting logged in username to " + usernameInput);
             localStorage.setItem('username', usernameInput);
             setLoggedIn(true);
+            SuccessMsg.fire({
+                icon: "success",
+                title: "Signed in successfully!"
+            });
 
         }
 
@@ -79,6 +84,13 @@ export default function Login() {
                     console.log("Setting logged in username to " + firstName.trim() + " " + lastName.trim());
                     localStorage.setItem('username', firstName.trim() + " " + lastName.trim());
                     setLoggedIn(true);
+
+                    // send login success message
+                    SuccessMsg.fire({
+                        icon: "success",
+                        title: "Created name and signed in successfully!"
+                    });
+                    
                 }
                 else{
                     console.log("Some error occured: ", result);
