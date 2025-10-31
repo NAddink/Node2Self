@@ -49,8 +49,7 @@ export default function Add() {
         console.log(`DEBUG: Entered name is \'${fullname}\'`)
 
         // ignore if name is empty or whitespace
-        if(fullname.trim() === "")
-        {
+        if(firstName.trim() === "" || lastName.trim() === ""){
             return;
         }
 

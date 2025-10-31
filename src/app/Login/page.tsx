@@ -49,6 +49,11 @@ export default function Login() {
         setErrorMsg("Loading...");
         let usernameInput = firstName.trim() + " " + lastName.trim();
 
+        if(firstName.trim() === "" || lastName.trim() === ""){
+            return;
+        }
+
+
         const exists = await nodeExists(usernameInput);
         
         if(exists){
