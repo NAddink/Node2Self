@@ -2,7 +2,7 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import {nodeExists, createLink, addNode } from "../components/db";
 import Navbar from "../components/Navbar";
-import { FailureMsg, SuccessMsg } from "../components/alerts";
+import { ConfirmMsg, SuccessMsg } from "../components/alerts";
 
 export default function Add() {
 
@@ -16,6 +16,7 @@ export default function Add() {
 
 
     useEffect(() => {
+
             let fullNameStorage : string | null = localStorage.getItem('username');
             if(fullNameStorage !== '' && fullNameStorage != null){
                 console.log("Full name found in storage var, full name is " + fullNameStorage)
@@ -92,52 +93,63 @@ export default function Add() {
             }
         }
         else{
-            // node does not exist, prompt to create
-            let isConfirmed = confirm("This name does not already exist, create it?", );
+            
 
-            // if user confirms, create new node and link
-            if(isConfirmed){
+            ConfirmMsg.fire({
+                title: `'${fullname}' does not exist, create?`
+            })
+            .then(async (result) => {
+                
+                // user confirmed creation of name, create it
 
-                setErrorMsg("Node does not exist, adding...")
-                const result = await addNode(fullname, userName);
-                if(result === 409){
-                    console.log("Tried to add node but it already exists!")
-                    setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
-                }
-                else if(result === 201){
-                    console.log("Node created successfully!")
-    
-                    const result = await createLink(userName, fullname, userName)
+                if (result.isConfirmed) {
+                    console.log("Confirmed!")
+                    setErrorMsg("Node does not exist, adding...")
+                    const result = await addNode(fullname, userName);
                     if(result === 409){
-                        console.log("Created node but link already exists! (Should not happen)")
-                        setErrorMsg("Created node but link already exists! (Should not happen)")
+                        console.log("Tried to add node but it already exists!")
+                        setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
                     }
-                    // Successfully added new node and linked it to user
                     else if(result === 201){
-                        console.log("Link created successfully!")
-                        
-                        // clear error msg
-                        setErrorMsg('');
+                        console.log("Node created successfully!")
 
-                        // send success msg
-                        SuccessMsg.fire({
-                            icon: "success",
-                            title: `Successfully added ${fullname} and linked to you!`
-                        });
+                        const result = await createLink(userName, fullname, userName)
+                        if(result === 409){
+                            console.log("Created node but link already exists! (Should not happen)")
+                            setErrorMsg("Created node but link already exists! (Should not happen)")
+                        }
+                        // Successfully added new node and linked it to user
+                        else if(result === 201){
+                            console.log("Link created successfully!")
+                            
+                            // clear error msg
+                            setErrorMsg('');
+
+                            // send success msg
+                            SuccessMsg.fire({
+                                icon: "success",
+                                title: `Successfully added ${fullname} and linked to you!`
+                            });
+                        }
+                        else{
+                            console.log("Some error occured: ", result);
+                            setErrorMsg("ERROR: " + result);
+
+                        }
                     }
                     else{
                         console.log("Some error occured: ", result);
                         setErrorMsg("ERROR: " + result);
-    
                     }
-                }
-                else{
-                    console.log("Some error occured: ", result);
-                    setErrorMsg("ERROR: " + result);
-                }
-            }
+                    
 
-            setErrorMsg(""); // create cancelled, clear message
+                    setErrorMsg(""); // create cancelled, clear message
+                } else {
+                    console.log("Did not confirm");
+                }
+            });
+
+            setErrorMsg("");
         }
     }
 

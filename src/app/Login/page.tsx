@@ -50,6 +50,8 @@ export default function Login() {
         let usernameInput = firstName.trim() + " " + lastName.trim();
 
         if(firstName.trim() === "" || lastName.trim() === ""){
+            // set message to blank and return
+            setErrorMsg("");
             return;
         }
 
