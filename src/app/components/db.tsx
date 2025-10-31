@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { SuccessMsg } from './alerts';
 
 
-export async function nodeExists (name : string) {
+export async function NodeExists (name : string) {
     
     if(name.trim() === "")
     {
@@ -39,7 +40,7 @@ export async function nodeExists (name : string) {
 
 }
 
-export async function createLink(source : string, target: string, addedBy: string){
+export async function CreateLink(source : string, target: string, addedBy: string){
 
     const sourceRes = await axios.get(`../api/nodes/${source}`);
     const targetRes = await axios.get(`../api/nodes/${target}`);
@@ -80,7 +81,7 @@ export async function createLink(source : string, target: string, addedBy: strin
 
 }
 
-export async function addNode(name: string, addedBy : string){
+export async function CreateNode(name: string, addedBy : string){
 
     try{
 
@@ -103,4 +104,44 @@ export async function addNode(name: string, addedBy : string){
         console.log("Error creating node between 2 nodes")
     }
 
+}
+
+
+export async function CreateNodeAndLink(fullname: string, userName: string){
+    const result = await CreateNode(fullname, userName);
+    if(result === 409){
+        console.log("Tried to add node but it already exists!")
+        return(409)
+    }
+    else if(result === 201){
+        console.log("Node created successfully!")
+
+        const result = await CreateLink(userName, fullname, userName)
+        if(result === 409){
+            console.log("Created node but link already exists! (Should not happen)")
+            return(409)
+        }
+        // Successfully added new node and linked it to user
+        else if(result === 201){
+            console.log("Link created successfully!")
+            
+            // send success msg
+            SuccessMsg.fire({
+                icon: "success",
+                title: `Successfully added ${fullname} and linked to you!`
+            });
+
+            return(201);
+        }
+        else{
+            console.log("Some error occured: ", result);
+            return(500);
+
+        }
+    }
+    else{
+        console.log("Some error occured: ", result);
+        return(500);
+    }
+    
 }

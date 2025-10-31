@@ -1,6 +1,6 @@
 "use client";
 import { useState, ChangeEvent, useEffect } from "react";
-import {nodeExists, createLink, addNode } from "../components/db";
+import {NodeExists, CreateLink, CreateNode, CreateNodeAndLink } from "../components/db";
 import Navbar from "../components/Navbar";
 import { ConfirmMsg, SuccessMsg } from "../components/alerts";
 
@@ -12,7 +12,7 @@ export default function Add() {
     const [userName, setUserName] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
 
-    const [errorMsg, setErrorMsg] = useState("");
+    const [statusMsg, setStatusMsg] = useState("");
 
 
     useEffect(() => {
@@ -54,19 +54,16 @@ export default function Add() {
             return;
         }
 
-        setErrorMsg("Loading...");
+        setStatusMsg("Loading...");
 
         // get storage variable and verify that it's a string
         
-        const exists = await nodeExists(fullname);
+        const exists = await NodeExists(fullname);
         console.log(exists);
         if (exists){
-            const result = await createLink(userName, fullname, userName)
+            const result = await CreateLink(userName, fullname, userName)
             if(result === 409){
                 console.log("Link already exists!")
-
-                // clear error msg
-                setErrorMsg("")
 
                 // send error msg
                 SuccessMsg.fire({
@@ -75,10 +72,7 @@ export default function Add() {
                 });
             }
             else if(result === 201){
-                console.log("Link created successfully!")
-
-                // clear error msg
-                setErrorMsg('')
+                console.log("Link created successfully!")                
 
                 // send success msg
                 SuccessMsg.fire({
@@ -88,13 +82,13 @@ export default function Add() {
             }
             else{
                 console.log("Some error occured: ", result);
-                setErrorMsg("ERROR: " + result);
+                setStatusMsg("ERROR: " + result);
 
             }
         }
+        // Trying to add node that does not already exist
         else{
             
-
             ConfirmMsg.fire({
                 title: `'${fullname}' does not exist, create?`
             })
@@ -104,52 +98,17 @@ export default function Add() {
 
                 if (result.isConfirmed) {
                     console.log("Confirmed!")
-                    setErrorMsg("Node does not exist, adding...")
-                    const result = await addNode(fullname, userName);
-                    if(result === 409){
-                        console.log("Tried to add node but it already exists!")
-                        setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
-                    }
-                    else if(result === 201){
-                        console.log("Node created successfully!")
-
-                        const result = await createLink(userName, fullname, userName)
-                        if(result === 409){
-                            console.log("Created node but link already exists! (Should not happen)")
-                            setErrorMsg("Created node but link already exists! (Should not happen)")
-                        }
-                        // Successfully added new node and linked it to user
-                        else if(result === 201){
-                            console.log("Link created successfully!")
-                            
-                            // clear error msg
-                            setErrorMsg('');
-
-                            // send success msg
-                            SuccessMsg.fire({
-                                icon: "success",
-                                title: `Successfully added ${fullname} and linked to you!`
-                            });
-                        }
-                        else{
-                            console.log("Some error occured: ", result);
-                            setErrorMsg("ERROR: " + result);
-
-                        }
-                    }
-                    else{
-                        console.log("Some error occured: ", result);
-                        setErrorMsg("ERROR: " + result);
-                    }
-                    
-
-                    setErrorMsg(""); // create cancelled, clear message
+                    CreateNodeAndLink(fullname, userName);
+                    setStatusMsg("");
                 } else {
                     console.log("Did not confirm");
-                    setErrorMsg("");
+                    setStatusMsg("");
                 }
             });
         }
+
+        // function finished, clear loding message
+        setStatusMsg('')
     }
 
     
@@ -209,7 +168,7 @@ export default function Add() {
                             </div>
                         </form>
                         
-                        <p className="text-center pt-8 text-red-800">{errorMsg}</p>
+                        <p className="text-center pt-8 text-red-800">{statusMsg}</p>
                         <div className="flex justify-center">
                             <p className="text-[12px]"><i>
                             Confused wether or not someone counts as a "connection"? <br />

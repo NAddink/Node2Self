@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import React, { ChangeEvent, MouseEvent } from 'react';
 import Navbar from "../components/Navbar";
-import {addNode, nodeExists}from "../components/db";
+import {CreateNode, NodeExists}from "../components/db";
 import { ConfirmMsg, SuccessMsg } from "../components/alerts";
  
 
@@ -56,7 +56,7 @@ export default function Login() {
         }
 
 
-        const exists = await nodeExists(usernameInput);
+        const exists = await NodeExists(usernameInput);
         
         if(exists){
             // name logging in already has a node
@@ -85,7 +85,7 @@ export default function Login() {
 
                 if (result.isConfirmed) {
                     
-                    const result = await addNode(usernameInput, "new user");
+                    const result = await CreateNode(usernameInput, "new user");
                     if(result === 409){
                         console.log("Tried to add node but it already exists!")
                         setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
