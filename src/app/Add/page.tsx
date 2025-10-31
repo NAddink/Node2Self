@@ -210,6 +210,24 @@ export default function Add() {
                         </form>
                         
                         <p className="text-center pt-8 text-red-800">{errorMsg}</p>
+                        <div className="flex justify-center">
+                            <p className="text-[12px]"><i>
+                            Confused wether or not someone counts as a "connection"? <br />
+                            <u>To make things more clear, we'll say the following must be true:</u> <br /> <br />
+                            • You have to know this person's first and last name <br />
+                            • You have a direct way to contact this person <br />
+                            • They know/have met you as well <br /><br />
+
+                            If you aren't sure, then don't count them. <br /><br /><br />
+
+                            I am aware this is not the perfect model, and excludes alot <br /> of people you would
+                            definitely include as a 'connection', this is <br /> subject to change. Let me know
+                            if you have any ideas for what <br /> should qualify as a 'connection'
+                            
+                        </i></p>
+
+                        </div>
+                        
                     </div>
                 )}
 
