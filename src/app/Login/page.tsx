@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import React, { ChangeEvent, MouseEvent } from 'react';
 import Navbar from "../components/Navbar";
 import {addNode, nodeExists}from "../components/db";
-import { SuccessMsg } from "../components/alerts";
+import { ConfirmMsg, SuccessMsg } from "../components/alerts";
  
 
 export default function Login() {
@@ -76,38 +76,45 @@ export default function Login() {
             console.log("This name does not already have a node. Create one.")
             setErrorMsg("This name does not already exist in the graph. Creating it now...")
             
-            // Prompt user to confirm new creation
-            let isConfirmed = confirm("This name does not already exist, create it?", );
+            ConfirmMsg.fire({
+                title: `'${usernameInput}' does not exist, create?`
+            })
+            .then(async (result) => {
+                
+                // user confirmed creation of name, create it
 
-            // Create new node after confirming with user
-            if(isConfirmed){
-                const result = await addNode(usernameInput, "new user");
-                if(result === 409){
-                    console.log("Tried to add node but it already exists!")
-                    setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
-                }
-                else if(result === 201){
-                    console.log("Node created successfully!")
-                    console.log("Setting logged in username to " + firstName.trim() + " " + lastName.trim());
-                    localStorage.setItem('username', firstName.trim() + " " + lastName.trim());
-                    setLoggedIn(true);
-
-                    // send login success message
-                    SuccessMsg.fire({
-                        icon: "success",
-                        title: "Created name and signed in successfully!"
-                    });
+                if (result.isConfirmed) {
                     
+                    const result = await addNode(usernameInput, "new user");
+                    if(result === 409){
+                        console.log("Tried to add node but it already exists!")
+                        setErrorMsg("Tried to add node but it already exists! (You should not be seeing this)")
+                    }
+                    else if(result === 201){
+                        console.log("Node created successfully!")
+                        console.log("Setting logged in username to " + firstName.trim() + " " + lastName.trim());
+                        localStorage.setItem('username', firstName.trim() + " " + lastName.trim());
+                        setLoggedIn(true);
+        
+                        // send login success message
+                        SuccessMsg.fire({
+                            icon: "success",
+                            title: "Created name and signed in successfully!"
+                        });
+                        
+                    }
+                    else{
+                        console.log("Some error occured: ", result);
+                        setErrorMsg("ERROR: " + result);
+                    }
+
                 }
                 else{
-                    console.log("Some error occured: ", result);
-                    setErrorMsg("ERROR: " + result);
+                    setErrorMsg(""); // create cancelled, clear message
+                    console.log("Did not confim create new user")
                 }
-
-            }
-
-            setErrorMsg(""); // create cancelled, clear message
-
+            });
+            
         }
 
     }

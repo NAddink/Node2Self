@@ -146,10 +146,9 @@ export default function Add() {
                     setErrorMsg(""); // create cancelled, clear message
                 } else {
                     console.log("Did not confirm");
+                    setErrorMsg("");
                 }
             });
-
-            setErrorMsg("");
         }
     }
 
