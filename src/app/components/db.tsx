@@ -65,14 +65,27 @@ export async function CreateLink(source : string, target: string, addedBy: strin
             added_by: addedBy
         });
 
-        console.log(response);
+        console.log("response from db adding links:", response.status);
         console.log("Added link between nodes successfully!");
+
+        // send success msg
+        SuccessMsg.fire({
+            icon: "success",
+            title: `Successfully linked ${target} to you`
+        });
+
         return 201;
 
     } catch(error: any) {
         if (axios.isAxiosError(error)){
             if(error.response?.status === 409){
-                console.log("Link already exists! (409 Conflict)");
+                console.log("Link already exists! (409 Conflict) IN DB");
+                // send error msg
+                SuccessMsg.fire({
+                    icon: "error",
+                    title: `Link already exists!`
+                });
+
                 return 409;
             }
         }

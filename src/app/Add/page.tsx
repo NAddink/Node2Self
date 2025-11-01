@@ -54,39 +54,18 @@ export default function Add() {
             return;
         }
 
+        // Set status to loading
         setStatusMsg("Loading...");
 
-        // get storage variable and verify that it's a string
-        
+        // check if node already exists        
         const exists = await NodeExists(fullname);
         console.log(exists);
         if (exists){
-            const result = await CreateLink(userName, fullname, userName)
-            if(result === 409){
-                console.log("Link already exists!")
 
-                // send error msg
-                SuccessMsg.fire({
-                    icon: "error",
-                    title: `Link already exists!`
-                });
-            }
-            else if(result === 201){
-                console.log("Link created successfully!")                
-
-                // send success msg
-                SuccessMsg.fire({
-                    icon: "success",
-                    title: `Successfully linked ${fullname} to you`
-                });
-            }
-            else{
-                console.log("Some error occured: ", result);
-                setStatusMsg("ERROR: " + result);
-
-            }
+            await CreateLink(userName, fullname, userName)
         }
-        // Trying to add node that does not already exist
+
+        // Node does not exist, prompt user to create new one
         else{
             
             ConfirmMsg.fire({
@@ -98,11 +77,9 @@ export default function Add() {
 
                 if (result.isConfirmed) {
                     console.log("Confirmed!")
-                    CreateNodeAndLink(fullname, userName);
-                    setStatusMsg("");
+                    await CreateNodeAndLink(fullname, userName);
                 } else {
                     console.log("Did not confirm");
-                    setStatusMsg("");
                 }
             });
         }
