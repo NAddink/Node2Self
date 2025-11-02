@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ForceGraph from './components/Graph';
 import Navbar from './components/Navbar';
+import { ConfirmMsg, SuccessMsg } from './components/alerts';
+import Swal from 'sweetalert2';
 
 // Dynamically import ForceGraph2D only on the client
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
@@ -13,6 +15,8 @@ export default function Home() {
 
     const [userName, setUserName] = useState("");
     const [loading, setLoading] = useState(true);
+
+    const [refreshKey, setRefreshKey] = useState(0); // key for making forcegraph re-render
     
     // runs on page load to get name from storage
     useEffect(() => {
@@ -38,8 +42,39 @@ export default function Home() {
     }
     }, [userName]);
 
-    const onNodeClick = (name: string) => {
-        console.log(name)
+    // on node click prompt to edit spelling
+    const onNodeClick = async (oldName: string) => {
+        
+        const { value: newName } = await Swal.fire({
+            title: `Edit ${oldName}?`,
+            input: "text",
+            inputLabel: "Change name spelling?",
+            inputValue: oldName,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            
+            });
+            if (newName && newName !== oldName) { // if user inputs a name
+                
+                const nameData = {
+                    name: newName
+                }
+
+                try{
+                    await axios.put(`../api/nodes/${oldName}`, nameData);
+                    
+                    SuccessMsg.fire({
+                        icon: "success",
+                        title: `Updated name!`
+                    });
+
+                    setRefreshKey(refreshKey + 1); // force graph re-render to show updated name
+                }
+                catch(error){
+                    console.log("ERROR editing name: ", error);
+                }
+
+            }
     }
 
     
@@ -49,7 +84,13 @@ export default function Home() {
                 {/* Navbar */}
                 <Navbar />
                 
-                {!loading && <ForceGraph userName={userName} onNodeClick={onNodeClick}/>}
+                {!loading && 
+                <ForceGraph 
+                    key={refreshKey}
+                    userName={userName} 
+                    onNodeClick={onNodeClick}
+                />
+                }
 
             </div>
         </div>

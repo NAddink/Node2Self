@@ -55,7 +55,7 @@ function ForceGraph(props?: any) {
             {/* Force graph text2D from react-force-graph by vasturiano on github */}
             <ForceGraph2D
                 graphData={myData}
-                onNodeRightClick={(sender) => {props.onNodeClick(sender.name)}}
+                onNodeClick={(sender) => {props.onNodeClick(sender.name)}}
                 nodeCanvasObject={(node, ctx) => {
                 const label = node.name;
                 const fontSize = 4;
