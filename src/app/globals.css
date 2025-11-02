@@ -6,6 +6,19 @@
   
 }
 
+/* Styling for the highlighted text within the dropdown item */
+#ac.p-highlight {
+    font-weight: bold;
+    color: var(--primary-color, #007bff); /* Use your theme's primary color or a specific color */
+    background-color: var(--primary-lighter-color, #e9ecef); /* Optional: add a background color */
+}
+
+/* Optional: styling for the standard dropdown items for better visual appeal */
+.autocomplete-item {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
 
 @theme inline {
   --color-background: var(--background);
@@ -34,3 +47,19 @@ body {
 
 }
 
+
+/* Overwrite primereact autocomplete styling */
+.p-autocomplete-input {
+    font-family: 'Pixellari';
+    background: none;
+    border-color: black;
+}
+
+/* Disable primereact box shadow on input */
+.p-inputtext:focus {
+  box-shadow: none ; 
+}
+
+.p-autocomplete-panel .p-autocomplete-item {
+  font-family: 'Pixellari';
+}

@@ -1,8 +1,13 @@
 "use client";
 import { useState, ChangeEvent, useEffect } from "react";
-import {NodeExists, CreateLink, CreateNode, CreateNodeAndLink } from "../components/db";
+import {NodeExists, CreateLink, CreateNode, CreateNodeAndLink, GetAllNodesAsArray } from "../components/db";
 import Navbar from "../components/Navbar";
 import { ConfirmMsg, SuccessMsg } from "../components/alerts";
+import { AutoComplete } from "primereact/autocomplete";
+import 'primereact/resources/themes/tailwind-light/theme.css'; // or another theme
+import 'primereact/resources/primereact.min.css';
+
+
 
 export default function Add() {
 
@@ -11,30 +16,46 @@ export default function Add() {
     const [userName, setUserName] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
 
+    const [filteredNames, setFilteredNames] = useState<string[]>([]);
+    const [namesList, setNamesList] = useState<string[]>([]);
+
+
     const [statusMsg, setStatusMsg] = useState("");
 
 
     useEffect(() => {
 
-            let fullNameStorage : string | null = localStorage.getItem('username');
-            if(fullNameStorage !== '' && fullNameStorage != null){
-                console.log("Full name found in storage var, full name is " + fullNameStorage)
-                setUserName(fullNameStorage ?? "");
-                console.log("Setting logged in to true");
-                setLoggedIn(true);
-            }
-            else{
-                console.log("No local variable found")
-            }
-            setLoading(false);
-            
+        // Check login and direct user to login if not already
+        let fullNameStorage : string | null = localStorage.getItem('username');
+        if(fullNameStorage !== '' && fullNameStorage != null){
+            console.log("Full name found in storage var, full name is " + fullNameStorage)
+            setUserName(fullNameStorage ?? "");
+            console.log("Setting logged in to true");
+            setLoggedIn(true);
+        }
+        else{
+            console.log("No local variable found")
+        }
+        setLoading(false);
+
+        // get all names as a list for autocomplete
+        prepAutoComplete();
+
     }, []);
 
-   
-    const fullNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setFullName(event.target.value); // Update state on every input change
-        console.log("DEBUG: Current full name " + fullName)
+    const prepAutoComplete = async () => {
+        const namesArray = GetAllNodesAsArray();
+        setNamesList(await namesArray);
+    }
+
+    const autoCompleteSearch = (e: {query: string}) => {
+        // e.query contains the text the user typed
+        let results = namesList.filter((name) =>
+            name.toLowerCase().startsWith(e.query.toLowerCase())
+        );
+        setFilteredNames(results);  
     };
+   
     
 
     const addHandler = async (event: any) => {
@@ -115,12 +136,19 @@ export default function Add() {
                         <form onSubmit={addHandler}>
                             <p className="text-center text-black">Currently logged in as {userName}!</p>
                             <label className="text-black">Full Name</label>
-                            <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
-                            type="text" 
-                            placeholder="John" 
-                            value={fullName} // Bind input value to state
-                            onChange={fullNameChange} // Update state on change
+                            <input>
+                            </input>
+                            <AutoComplete
+                                // inputStyle={{fontFamily: 'Pixellari'}}
+                                // panelStyle={{fontFamily: 'Pixellari'}}
+                                id="ac"
+                                className="w-full " 
+                                inputClassName="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center"
+                                value={fullName}
+                                suggestions={filteredNames}
+                                completeMethod={autoCompleteSearch}
+                                onChange={(e: any) => setFullName(e.value)}
+                                placeholder="John Deer"
                             />
 
                             
