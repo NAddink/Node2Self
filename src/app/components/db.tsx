@@ -158,3 +158,19 @@ export async function CreateNodeAndLink(fullname: string, userName: string){
     }
     
 }
+
+
+export async function GetAllNodesAsArray() {
+
+    try{
+        const response = await axios.get(`../api/nodes/`)
+        const nameslist = response.data.map((node: { name: any; }) => node.name)
+        
+        return nameslist;
+    }
+    catch(error: any){
+        console.log("Error: ", error);
+    }
+
+
+}
