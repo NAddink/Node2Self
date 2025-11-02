@@ -6,8 +6,7 @@ import { ConfirmMsg, SuccessMsg } from "../components/alerts";
 
 export default function Add() {
 
-    const [firstName, setFirstName] = useState(''); // Initialize state for first name
-    const [lastName, setLastName] = useState(''); // Initialize state for last name
+    const [fullName, setFullName] = useState(''); // Initialize state for first name
     const [loading, setLoading] = useState(true);
     const [userName, setUserName] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
@@ -31,14 +30,10 @@ export default function Add() {
             
     }, []);
 
-    const firstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setFirstName(event.target.value); // Update state on every input change
-        console.log("DEBUG: Current first name " + firstName)
-    };
-
-    const lastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setLastName(event.target.value); // Update state on every input change
-        console.log("DEBUG: Current last name " + lastName)
+   
+    const fullNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setFullName(event.target.value); // Update state on every input change
+        console.log("DEBUG: Current full name " + fullName)
     };
     
 
@@ -46,11 +41,11 @@ export default function Add() {
         event.preventDefault(); 
         
 
-        const fullname = firstName.trim() + " " + lastName.trim();
-        console.log(`DEBUG: Entered name is \'${fullname}\'`)
+        
+        console.log(`DEBUG: Entered name is \'${fullName}\'`)
 
         // ignore if name is empty or whitespace
-        if(firstName.trim() === "" || lastName.trim() === ""){
+        if(fullName === ""){
             return;
         }
 
@@ -58,18 +53,18 @@ export default function Add() {
         setStatusMsg("Loading...");
 
         // check if node already exists        
-        const exists = await NodeExists(fullname);
+        const exists = await NodeExists(fullName);
         console.log(exists);
         if (exists){
 
-            await CreateLink(userName, fullname, userName)
+            await CreateLink(userName, fullName, userName)
         }
 
         // Node does not exist, prompt user to create new one
         else{
             
             ConfirmMsg.fire({
-                title: `'${fullname}' does not exist, create?`
+                title: `'${fullName}' does not exist, create?`
             })
             .then(async (result) => {
                 
@@ -77,7 +72,7 @@ export default function Add() {
 
                 if (result.isConfirmed) {
                     console.log("Confirmed!")
-                    await CreateNodeAndLink(fullname, userName);
+                    await CreateNodeAndLink(fullName, userName);
                 } else {
                     console.log("Did not confirm");
                 }
@@ -119,23 +114,16 @@ export default function Add() {
                     <div className="pt-5">
                         <form onSubmit={addHandler}>
                             <p className="text-center text-black">Currently logged in as {userName}!</p>
-                            <label className="text-black">First Name</label>
+                            <label className="text-black">Full Name</label>
                             <input 
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
                             type="text" 
                             placeholder="John" 
-                            value={firstName} // Bind input value to state
-                            onChange={firstNameChange} // Update state on change
+                            value={fullName} // Bind input value to state
+                            onChange={fullNameChange} // Update state on change
                             />
 
-                            <label className="text-black">Last Name</label>
-                            <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" 
-                            type="text" 
-                            placeholder="Deer" 
-                            value={lastName} // Bind input value to state
-                            onChange={lastNameChange} // Update state on change
-                            />
+                            
                             <br /> <br />
                             
                             <div className="flex justify-center">
