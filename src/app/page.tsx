@@ -38,6 +38,10 @@ export default function Home() {
     }
     }, [userName]);
 
+    const onNodeClick = (name: string) => {
+        console.log(name)
+    }
+
     
     return (
         <div className="flex justify-center items-center h-screen w-screen">
@@ -45,7 +49,7 @@ export default function Home() {
                 {/* Navbar */}
                 <Navbar />
                 
-                {!loading && <ForceGraph userName={userName}/>}
+                {!loading && <ForceGraph userName={userName} onNodeClick={onNodeClick}/>}
 
             </div>
         </div>
