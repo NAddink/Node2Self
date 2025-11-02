@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import ForceGraph from './components/Graph';
 import Navbar from './components/Navbar';
@@ -71,6 +71,14 @@ export default function Home() {
                     setRefreshKey(refreshKey + 1); // force graph re-render to show updated name
                 }
                 catch(error){
+                    if(isAxiosError(error)){
+                        if(error.status == 409){
+                            SuccessMsg.fire({
+                                icon: "error",
+                                title: `Name already exists!`
+                            });
+                        }
+                    }
                     console.log("ERROR editing name: ", error);
                 }
 
