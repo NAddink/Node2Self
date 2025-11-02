@@ -51,7 +51,7 @@ export default function Add() {
     const autoCompleteSearch = (e: {query: string}) => {
         // e.query contains the text the user typed
         let results = namesList.filter((name) =>
-            name.toLowerCase().startsWith(e.query.toLowerCase())
+            name.toLowerCase().includes(e.query.toLowerCase())
         );
         setFilteredNames(results);  
     };
