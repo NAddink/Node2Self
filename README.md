@@ -34,3 +34,21 @@ Changelog:
 `/api/nodes/[John Smith]` [GET/PUT/DELETE] (Slug)
 
 `/api/links/id`  [GET/POST/DEL]
+
+
+
+
+### Additional notes: 
+
+The following can add images to nodes inside graph:
+
+```
+const img = new Image;
+img.src = 'https://upload.wikimedia.org/wikipedia/commons/8/85/Smiley.svg';
+img.width = 2;
+
+const imgHeight = 20;
+const imgWidth = 20;
+
+ctx.drawImage(img, (node.x ?? 0) - imgWidth / 2, (node.y ?? 0) - imgHeight / 2, imgWidth, imgHeight); 
+```
