@@ -3,7 +3,7 @@ import "./globals.css";
 
 
 export const metadata: Metadata = {
-  title: "Degrees of Separation",
+  title: "Node2Self",
   description: "Created By Noah Addink",
 };
 
