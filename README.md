@@ -1,4 +1,4 @@
-# Degrees of Separation
+# Node2Self
 
 This project is a passion project founded in my interest in the Stanley Milgram's [Small World Experiments](https://en.wikipedia.org/wiki/Six_degrees_of_separation) and research suggesting that human society is a small-world network.
 
