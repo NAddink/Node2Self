@@ -40,3 +40,7 @@ Changelog:
 `/api/nodes/[John Smith]` [GET/PUT/DELETE] (Slug)
 
 `/api/links/id`  [GET/POST/DEL]
+
+
+### External resources:
+https://github.com/vasturiano/react-force-graph
