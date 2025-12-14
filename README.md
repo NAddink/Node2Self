@@ -2,7 +2,9 @@
 
 <img width="1876" height="858" alt="image" src="https://github.com/user-attachments/assets/de971ee9-6d73-4675-a6ae-1dd7242b6484" />
 
+# Proof-of-concept site live at [node2self.noahadd.ink](https://node2self.noahadd.ink/)
 
+## Info
 This project is a passion project founded in my interest in the Stanley Milgram's [Small World Experiments](https://en.wikipedia.org/wiki/Six_degrees_of_separation) and research suggesting that human society is a small-world network.
 
 While I am not a sociologist or involved in those fields, I thought this was very interesting and wanted to see if I could create my own (very non-scientific) representation of this.
