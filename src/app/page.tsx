@@ -90,6 +90,13 @@ export default function Home() {
         <div className="flex justify-center items-center h-screen w-screen">
             <div className="h-[95vh] w-[95vw] bg-linear-45 from-[#fada61] via-[#ff9188] to-[#ff5acd] rounded-xl p-[2%] overflow-hidden">
                 {/* Navbar */}
+                <a href="https://noahadd.ink" className='absolute right-0 top-0'>
+                <img 
+                    src={"image/home-icon.png"} 
+                    className='bg-neutral-500 lg:w-10 w-5 lg:p-2 m-2' 
+                    alt="Home"
+                />
+                </a>                
                 <Navbar />
                 
                 {!loading && 
