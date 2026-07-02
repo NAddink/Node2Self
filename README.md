@@ -41,6 +41,8 @@ Changelog:
 
 `/api/links/id`  [GET/POST/DEL]
 
+`/api/links/node/id` [GET] 
+
 
 ### External resources:
 https://github.com/vasturiano/react-force-graph

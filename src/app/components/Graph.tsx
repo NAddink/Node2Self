@@ -21,10 +21,23 @@ function ForceGraph(props?: any) {
             
             // Then fetch links
             const linksRes = await axios.get('../api/links');
+
+            // const neighbors = await axios.get('../api/links/neighbors/')
                         
             // set current user node to red (given as props.userName)
             const updatedNodes = nodesRes.data.map((node?: any) => {
-                const color = node.name.toLowerCase() === props.userName.toLowerCase() ? 'black' : 'white'
+                let color = node.name.toLowerCase() === props.userName.toLowerCase() ? 'black' : 'white'
+                if(props.neighbors){
+                    if(node.name.toLowerCase() === props.userName.toLowerCase() ){
+                        color = 'black';
+                    }
+                    else if(props.neighbors.includes(node.name.toLowerCase())){
+                        color = 'rgb(177, 255, 171)';
+                    }
+                    else{
+                        color = 'white';
+                    }
+                }
                 return { ...node, color };
             });
 

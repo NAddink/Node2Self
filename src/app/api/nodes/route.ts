@@ -9,13 +9,22 @@ export async function GET(request: NextRequest) {
         const pool = getPool();
         const url = new URL(request.url);
         let nodesData: Node[];
+        const nodeIdParam = url.searchParams.get('id');
+        console.log("Node id param " + nodeIdParam);
+
+        
+        if(nodeIdParam){
+            const res = await pool.query('SELECT * FROM nodes WHERE id = $1', [nodeIdParam]);
+            nodesData = res.rows;
+            return NextResponse.json(nodesData);
+        }
+        else{
+            const res = await pool.query('SELECT * FROM nodes');
+            nodesData = res.rows;
+            return NextResponse.json(nodesData);
+        }
 
 
-        const res = await pool.query('SELECT * FROM nodes');
-        nodesData = res.rows;
-
-
-        return NextResponse.json(nodesData);
     } catch (error) {
         console.error('GET /api/node error:', error);
         return NextResponse.json({ error: 'Failed to fetch node' }, { status: 500 });
